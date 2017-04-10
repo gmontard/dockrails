@@ -21,6 +21,8 @@ Currently the CLI offers a Docker environment with the option of:
 
 You can expand this scope very easily by modifying the output docker files generated.
 
+[![asciicast](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx.png)](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx)
+
 ### Install
 
 ```gem install dockrails```
