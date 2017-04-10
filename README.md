@@ -21,7 +21,7 @@ Currently the CLI offers a Docker environment with the option of:
 
 You can expand this scope very easily by modifying the output docker files generated.
 
-[![asciicast](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx.png)](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx)
+[![asciicast](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx.png)](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx?autoplay=1)
 
 ### Install
 
@@ -34,7 +34,7 @@ You can expand this scope very easily by modifying the output docker files gener
 
 ### Commands
 
-Dockerize your app:
+Create a folder on top of your Rails App, add your App inside it, then run:
 - ```dockrails init```
 
 *Answer the different questions to build your docker environment and then you are ready to run it!*
@@ -51,3 +51,18 @@ Run a command inside a container:
 Attach TTY to a container (ex: for debugging with ByeBug or Pry):
 - ```dockrails attach CONTAINER```
 :warning: DO NOT use ```CTRL+C``` here or it will exit the container but instead use ```CTRL+Q+P```
+
+
+### Folder structure
+
+```
+my-docker-rails-env/
+  bundle/
+  data/
+    sql/
+    redis/
+  Dockerfile
+  docker-compose.yml
+  docker-sync.yml
+  YOUR_RAILS_APP/
+```
