@@ -1,0 +1,95 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'commander/import'
+require 'dockrails'
+
+program :name, 'dockrails'
+program :version, Dockrails::VERSION
+program :description, 'CLI to Generate and Run a Rails environment with Docker'
+
+command :init do |c|
+  c.syntax = 'railsdock init'
+  c.summary = 'Initialize your Rails Docker environment'
+  c.description = ''
+  c.example 'description', 'railsdock init'
+  c.action do |args, options|
+
+    existing_files = ["Dockerfile", "docker-compose.yml", "docker-sync.yml"].map { |file| File.exist?(file) }
+    if existing_files.include?(true)
+      say "We detected an existing Docker install in this folder"
+      answer = agree "Do you want to continue and override it?"
+      exit if !answer
+    end
+
+    rails_app = ask "\nType the name of your Rails App folder"
+    if !system("find #{rails_app} > /dev/null")
+      say "\nUnable to find your Rails application folder in the current path, please try again"
+      say "If you want to create a new Rails app: rails new my_app -B -d postgresql"
+      exit
+    end
+
+    generate = Dockrails::Generate.new(app_path: rails_app)
+    generate.create_folders
+    generate.create_dockerfile
+    generate.create_start_script
+    generate.create_docker_compose
+    generate.create_docker_sync
+
+    say "\nSuccessful dockerization!
+Please take a look at the different files generated:
+- Dockerfile
+- docker-compose.yml
+- docker-sync.yml"
+
+    say "\nStart your dockerized Rails Environement: railsdock start"
+    say "Familiarize yourself with the different commands: railsdock --help"
+  end
+end
+
+command :start do |c|
+  c.syntax = 'railsdock start'
+  c.summary = 'Start the docker containers'
+  c.description = ''
+  c.example 'description', 'railsdock start'
+  c.action do |args, options|
+    system("docker-sync-stack start")
+  end
+end
+
+command :clean do |c|
+  c.syntax = 'railsdock clean'
+  c.summary = 'Clean the docker containers'
+  c.description = ''
+  c.example 'description', 'railsdock clean'
+  c.action do |args, options|
+    system("docker-sync-stack clean")
+  end
+end
+
+command :run do |c|
+  c.syntax = 'railsdock run [container] [command]'
+  c.summary = 'Run a command on a specific container'
+  c.description = ''
+  c.example 'description', 'railsdock run [web|job|db|redis] bundle install'
+  c.action do |args, options|
+    if args.size < 2
+      say "\n Please specify a container and command to run, ex: railsdock run app bundle install"
+    else
+      system("docker-compose run #{args.join(" ")}")
+    end
+  end
+end
+
+command :attach do |c|
+  c.syntax = 'railsdock attach [container]'
+  c.summary = 'Attach TTY to a specific container (usefull for ByeBug or Pry)'
+  c.description = 'toto'
+  c.action do |args, options|
+    if args.size < 1
+      say "\n Please specify a container, ex: railsdock attach app"
+    else
+      system("docker attach $(docker-compose ps -q #{args[0]})")
+    end
+  end
+end

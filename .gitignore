@@ -1,0 +1,7 @@
+bundle/
+data/
+keys/
+docker-compose.yml
+docker-sync.yml
+Dockerfile
+*.gem
