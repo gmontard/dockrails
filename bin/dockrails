@@ -9,10 +9,10 @@ program :version, Dockrails::VERSION
 program :description, 'CLI to Generate and Run a Rails environment with Docker'
 
 command :init do |c|
-  c.syntax = 'railsdock init'
+  c.syntax = 'dockrails init'
   c.summary = 'Initialize your Rails Docker environment'
   c.description = ''
-  c.example 'description', 'railsdock init'
+  c.example 'description', 'dockrails init'
   c.action do |args, options|
 
     existing_files = ["Dockerfile", "docker-compose.yml", "docker-sync.yml"].map { |file| File.exist?(file) }
@@ -42,39 +42,39 @@ Please take a look at the different files generated:
 - docker-compose.yml
 - docker-sync.yml"
 
-    say "\nStart your dockerized Rails Environement: railsdock start"
-    say "Familiarize yourself with the different commands: railsdock --help"
+    say "\nStart your dockerized Rails Environement: dockrails start"
+    say "Familiarize yourself with the different commands: dockrails --help"
   end
 end
 
 command :start do |c|
-  c.syntax = 'railsdock start'
+  c.syntax = 'dockrails start'
   c.summary = 'Start the docker containers'
   c.description = ''
-  c.example 'description', 'railsdock start'
+  c.example 'description', 'dockrails start'
   c.action do |args, options|
     system("docker-sync-stack start")
   end
 end
 
 command :clean do |c|
-  c.syntax = 'railsdock clean'
+  c.syntax = 'dockrails clean'
   c.summary = 'Clean the docker containers'
   c.description = ''
-  c.example 'description', 'railsdock clean'
+  c.example 'description', 'dockrails clean'
   c.action do |args, options|
     system("docker-sync-stack clean")
   end
 end
 
 command :run do |c|
-  c.syntax = 'railsdock run [container] [command]'
+  c.syntax = 'dockrails run [container] [command]'
   c.summary = 'Run a command on a specific container'
   c.description = ''
-  c.example 'description', 'railsdock run [web|job|db|redis] bundle install'
+  c.example 'description', 'dockrails run [web|job|db|redis] bundle install'
   c.action do |args, options|
     if args.size < 2
-      say "\n Please specify a container and command to run, ex: railsdock run app bundle install"
+      say "\n Please specify a container and command to run, ex: dockrails run app bundle install"
     else
       system("docker-compose run #{args.join(" ")}")
     end
@@ -82,12 +82,12 @@ command :run do |c|
 end
 
 command :attach do |c|
-  c.syntax = 'railsdock attach [container]'
+  c.syntax = 'dockrails attach [container]'
   c.summary = 'Attach TTY to a specific container (usefull for ByeBug or Pry)'
   c.description = 'toto'
   c.action do |args, options|
     if args.size < 1
-      say "\n Please specify a container, ex: railsdock attach app"
+      say "\n Please specify a container, ex: dockrails attach app"
     else
       system("docker attach $(docker-compose ps -q #{args[0]})")
     end
