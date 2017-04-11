@@ -12,8 +12,15 @@ Gem::Specification.new do |s|
   s.license               = "MIT"
   s.authors               = [ "Guillaume Montard" ]
   s.files                 = Dir["lib/**/*", "LICENSE", "README.me"]
+  s.test_files            = Dir["spec/**/*"]
   s.required_ruby_version = ">= 2.0.0"
   s.executables           << 'dockrails'
   s.add_dependency 'commander', '~> 4.2'
   s.add_dependency 'docker-sync', '~> 0.2.3'
+
+  s.add_development_dependency('rspec', '~> 3.2')
+  s.add_development_dependency('rake')
+  s.add_development_dependency('pry')
+  s.add_development_dependency('fakefs')
+  s.add_development_dependency('coveralls')
 end

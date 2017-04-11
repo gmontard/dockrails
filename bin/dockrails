@@ -18,7 +18,7 @@ command :init do |c|
     existing_files = ["Dockerfile", "docker-compose.yml", "docker-sync.yml"].map { |file| File.exist?(file) }
     if existing_files.include?(true)
       say "We detected an existing Docker install in this folder"
-      answer = agree "Do you want to continue and override it?"
+      answer = agree "Do you want to continue and override it? (yes|no)"
       exit if !answer
     end
 
@@ -30,6 +30,15 @@ command :init do |c|
     end
 
     generate = Dockrails::Generate.new(app_path: rails_app)
+
+    (generate.check_system_requirements).each do |k,v|
+      if v == false
+        say "please install \"#{k}\" in order to continue\n"
+        exit
+      end
+    end
+
+    generate.configure
     generate.create_folders
     generate.create_dockerfile
     generate.create_start_script

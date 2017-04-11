@@ -1,62 +1,60 @@
 module Dockrails
   class Generate
 
-    def initialize(app_path:)
-      check_system_requirements
+    def initialize(app_path:, config: {})
       @app_path = app_path
-      @config = ask_configuration
+      @config = config
     end
 
     def check_system_requirements
       requirement = Hash.new
-      requirement["unison"] = system("which unison > /dev/null")
-      requirement["docker"] = system("which docker > /dev/null")
-      requirement["docker-sync"] = system("which docker-sync > /dev/null")
-      requirement["docker-compose"] = system("which docker-compose > /dev/null")
 
-      requirement.each do |k,v|
-        if v == false
-          say "please install \"#{k}\" in order to continue\n"
-        end
+      ["unison", "docker", "docker-sync", "docker-compose"].each do |binary|
+        requirement[binary] = binary_present?(binary: binary)
       end
+
+      return requirement
     end
 
-    def ask_configuration
-      config = Hash.new
-      config["ruby-version"] = choose("\nChoose a ruby version?", "latest", "2.4", "2.3", "2.2")
-      config["db"] = choose("\nChoose a DB Engine?", :pgsql, :mysql)
-      config["db_name"] = ask "\nChoose a database name"
-      config["db_user"] = ask "\nChoose a database username"
-      config["db_password"] = ask "\nChoose a database password"
-      config["redis"] = agree("\nDo you need a Redis DB?")
-      config["sidekiq"] = agree("\nDo you need a SideKiq Container") if config["redis"]
+    def binary_present?(binary:)
+      system("which #{binary} > /dev/null")
+    end
+
+    def configure
+      @config[:"ruby-version"] = choose("\nChoose a ruby version?", "latest", "2.4", "2.3", "2.2")
+      @config[:db] = choose("\nChoose a DB Engine", :pgsql, :mysql)
+      @config[:db_name] = ask "\nChoose a database name"
+      @config[:db_user] = ask "\nChoose a database username"
+      @config[:db_password] = ask "\nChoose a database password"
+      @config[:redis] = agree("\nDo you need a Redis DB? (yes|no)")
+      @config[:sidekiq] = agree("\nDo you need a SideKiq Container? (yes|no)") if @config[:redis]
 
       user_agree = agree "\nSummary:
-    - Ruby version: #{config["ruby-version"]}
-    - DB Engine: #{config["db"]}
-    - DB Name: #{config["db_name"]}
-    - DB Username: #{config["db_user"]}
-    - DB Password: #{config["db_password"]}
-    - Redis? #{config["redis"]}
-    - Job Container? #{config["sidekiq"] ||= "false"}\n
-  Is this correct?"
+    - Ruby version: #{@config[:"ruby-version"]}
+    - DB Engine: #{@config[:db]}
+    - DB Name: #{@config[:db_name]}
+    - DB Username: #{@config[:db_user]}
+    - DB Password: #{@config[:db_password]}
+    - Redis? #{@config[:redis]}
+    - Job Container? #{@config[:sidekiq] ||= false}\n
+  Is this correct? (yes|no)"
 
       unless user_agree
-        ask_configuration
+        configure
       end
 
-      return(config)
+      return(@config)
     end
 
     def create_folders
-      system("rm -rf data")
-      system("mkdir -p data/sql")
-      system("mkdir -p data/redis") if @config["redis"]
+      FileUtils.rm_rf('data')
+      FileUtils.mkdir_p('data/sql')
+      FileUtils.mkdir_p('data/redis') if @config[:redis]
     end
 
     def create_dockerfile
       File.open("Dockerfile", 'w') do |f|
-        f.write("FROM ruby:#{@config["ruby-version"]}
+        f.write("FROM ruby:#{@config[:"ruby-version"]}
   RUN apt-get update && apt-get install -y \
   build-essential \
   wget \
@@ -88,7 +86,7 @@ module Dockrails
     end
 
     def create_start_script
-      system("mkdir -p #{@app_path}/scripts")
+      FileUtils.mkdir_p("#{@app_path}/scripts")
       File.open("#{@app_path}/scripts/start-dev.sh", "w") do |f|
         f.write("#!/bin/bash
   bundle check || bundle install
@@ -102,17 +100,17 @@ module Dockrails
         f.write "services:\n"
         f.write " db:\n"
 
-        case @config["db"] when :mysql
+        case @config[:db] when :mysql
           f.write "   image: mysql\n"
           f.write "   volumes:\n"
           f.write "     - ./data/sql:/var/lib/mysql\n"
           f.write "   ports:\n"
           f.write "     - \"3306:3306\"\n"
           f.write "   environment:\n"
-          f.write "     MYSQL_DATABASE: #{@config["db_name"]}\n"
-          f.write "     MYSQL_USER: #{@config["db_user"]}\n"
-          f.write "     MYSQL_PASSWORD: #{@config["db_password"]}\n"
-          f.write "     MYSQL_ROOT_PASSWORD: #{@config["db_password"]}\n"
+          f.write "     MYSQL_DATABASE: #{@config[:db_name]}\n"
+          f.write "     MYSQL_USER: #{@config[:db_user]}\n"
+          f.write "     MYSQL_PASSWORD: #{@config[:db_password]}\n"
+          f.write "     MYSQL_ROOT_PASSWORD: #{@config[:db_password]}\n"
         when :pgsql
           f.write "   image: postgres\n"
           f.write "   volumes:\n"
@@ -120,12 +118,12 @@ module Dockrails
           f.write "   ports:\n"
           f.write "     - \"5432:5432\"\n"
           f.write "   environment:\n"
-          f.write "     POSTGRES_DB: #{@config["db_name"]}\n"
-          f.write "     POSTGRES_USER: #{@config["db_user"]}\n"
-          f.write "     POSTGRES_PASSWORD: #{@config["db_password"]}\n"
+          f.write "     POSTGRES_DB: #{@config[:db_name]}\n"
+          f.write "     POSTGRES_USER: #{@config[:db_user]}\n"
+          f.write "     POSTGRES_PASSWORD: #{@config[:db_password]}\n"
         end
 
-        if @config["redis"]
+        if @config[:redis]
           f.write "\n redis:\n"
           f.write "   image: redis\n"
           f.write "   volumes:\n"
@@ -144,16 +142,16 @@ module Dockrails
         f.write "   ports:\n"
         f.write "     - \"3000:3000\"\n"
         f.write "   environment:\n"
-        f.write "     REDIS_URL: redis://redis:6379\n" if @config["redis"]
-        f.write "     DB_USER: #{@config["db_user"]}\n"
-        f.write "     DB_PASSWORD: #{@config["db_password"]}\n"
+        f.write "     REDIS_URL: redis://redis:6379\n" if @config[:redis]
+        f.write "     DB_USER: #{@config[:db_user]}\n"
+        f.write "     DB_PASSWORD: #{@config[:db_password]}\n"
         f.write "   links:\n"
         f.write "     - db\n"
-        f.write "     - redis\n" if @config["redis"]
+        f.write "     - redis\n" if @config[:redis]
         f.write "   tty: true\n"
         f.write "   stdin_open: true\n"
 
-        if @config["redis"] && @config["sidekiq"]
+        if @config[:redis] && @config[:sidekiq]
           f.write "\n job:\n"
           f.write "   build: .\n"
           f.write "   command: bundle exec sidekiq -C config/sidekiq.yml\n"
