@@ -21,7 +21,7 @@ module Dockrails
     end
 
     def configure
-      @config[:"ruby-version"] = choose("\nChoose a ruby version?", "latest", "2.4", "2.3", "2.2")
+      @config[:ruby] = choose("\nChoose a ruby version?", "latest", "2.4", "2.3", "2.2")
       @config[:db] = choose("\nChoose a DB Engine", :pgsql, :mysql)
       @config[:db_name] = ask "\nChoose a database name"
       @config[:db_user] = ask "\nChoose a database username"
@@ -30,7 +30,7 @@ module Dockrails
       @config[:sidekiq] = agree("\nDo you need a SideKiq Container? (yes|no)") if @config[:redis]
 
       user_agree = agree "\nSummary:
-    - Ruby version: #{@config[:"ruby-version"]}
+    - Ruby version: #{@config[:ruby]}
     - DB Engine: #{@config[:db]}
     - DB Name: #{@config[:db_name]}
     - DB Username: #{@config[:db_user]}
@@ -54,7 +54,7 @@ module Dockrails
 
     def create_dockerfile
       File.open("Dockerfile", 'w') do |f|
-        f.write("FROM ruby:#{@config[:"ruby-version"]}
+        f.write("FROM ruby:#{@config[:ruby]}
   RUN apt-get update && apt-get install -y \
   build-essential \
   wget \

@@ -56,7 +56,7 @@ describe Dockrails::Generate do
       @app_path = "rails_app"
 
       @config_with_redis = {
-        "ruby-version": "latest",
+        ruby: "latest",
         db: :pgsql,
         db_name: "rails",
         db_user: "rails",
@@ -66,7 +66,7 @@ describe Dockrails::Generate do
       }
 
       @config_without_redis = {
-        "ruby-version": "latest",
+        ruby: "latest",
         db: :pgsql,
         db_name: "rails",
         db_user: "rails",
@@ -76,7 +76,7 @@ describe Dockrails::Generate do
       }
 
       @config_with_mysql = {
-        "ruby-version": "latest",
+        ruby: "latest",
         db: :mysql,
         db_name: "rails",
         db_user: "rails",
