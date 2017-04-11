@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dockrails (1.0.1)
+    dockrails (1.0.2)
       commander (~> 4.2)
       docker-sync (~> 0.2.3)
 
