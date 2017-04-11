@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/gmontard/dockrails.svg?branch=master)](https://travis-ci.org/gmontard/dockrails) [![Coverage Status](https://coveralls.io/repos/github/gmontard/dockrails/badge.svg?branch=master)](https://coveralls.io/github/gmontard/dockrails?branch=master)
+
 ![](http://i.imgur.com/GpOR4F5.png)
 
 Simple CLI to Generate and Run a Rails environment with Docker!   
