@@ -7,6 +7,7 @@ require 'dockrails'
 program :name, 'dockrails'
 program :version, Dockrails::VERSION
 program :description, 'CLI to Generate and Run a Rails environment with Docker'
+program :help_formatter, Commander::HelpFormatter::TerminalCompact
 
 command :init do |c|
   c.syntax = 'dockrails init'
@@ -17,15 +18,15 @@ command :init do |c|
 
     existing_files = ["Dockerfile", "docker-compose.yml", "docker-sync.yml"].map { |file| File.exist?(file) }
     if existing_files.include?(true)
-      say "We detected an existing Docker install in this folder"
-      answer = agree "Do you want to continue and override it? (yes|no)"
+      say "<%= color 'We detected an existing Docker install in this folder', YELLOW %>"
+      answer = agree "<%= color 'Do you want to continue and override it? (yes|no)', BOLD %>"
       exit if !answer
     end
 
-    rails_app = ask "\nType the name of your Rails App folder"
+    rails_app = ask "\n<%= color 'Type the name of your Rails App folder', BOLD %>"
     if !system("find #{rails_app} > /dev/null")
-      say "\nUnable to find your Rails application folder in the current path, please try again"
-      say "If you want to create a new Rails app: rails new my_app -B -d postgresql"
+      say "\n<%= color 'Unable to find your Rails application folder in the current path, please try again', RED %>"
+      say "<%= color 'If you want to create a new Rails app: rails new my_app -B -d postgresql', UNDERLINE %>"
       exit
     end
 
@@ -33,7 +34,7 @@ command :init do |c|
 
     (generate.check_system_requirements).each do |k,v|
       if v == false
-        say "please install \"#{k}\" in order to continue\n"
+        say "\n<%= color 'Please install #{k} in order to continue', RED%>"
         exit
       end
     end
@@ -45,11 +46,11 @@ command :init do |c|
     generate.create_docker_compose
     generate.create_docker_sync
 
-    say "\nSuccessful dockerization!
+    say "\n<%= color 'Successful dockerization!
 Please take a look at the different files generated:
 - Dockerfile
 - docker-compose.yml
-- docker-sync.yml"
+- docker-sync.yml', GREEN%>"
 
     say "\nStart your dockerized Rails Environement: dockrails start"
     say "Familiarize yourself with the different commands: dockrails --help"
@@ -83,7 +84,7 @@ command :run do |c|
   c.example 'description', 'dockrails run [web|job|db|redis] bundle install'
   c.action do |args, options|
     if args.size < 2
-      say "\n Please specify a container and command to run, ex: dockrails run app bundle install"
+      say "\n<%= color 'Please specify a container and command to run, ex: dockrails run app bundle install', RED%>"
     else
       system("docker-compose run #{args.join(" ")}")
     end
@@ -96,7 +97,7 @@ command :attach do |c|
   c.description = 'toto'
   c.action do |args, options|
     if args.size < 1
-      say "\n Please specify a container, ex: dockrails attach app"
+      say "\n<%= color 'Please specify a container, ex: dockrails attach app', RED%>"
     else
       system("docker attach $(docker-compose ps -q #{args[0]})")
     end

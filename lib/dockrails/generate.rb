@@ -21,23 +21,24 @@ module Dockrails
     end
 
     def configure
-      @config[:ruby] = choose("\nChoose a ruby version?", "latest", "2.4", "2.3", "2.2")
-      @config[:db] = choose("\nChoose a DB Engine", :pgsql, :mysql)
-      @config[:db_name] = ask "\nChoose a database name"
-      @config[:db_user] = ask "\nChoose a database username"
-      @config[:db_password] = ask "\nChoose a database password"
-      @config[:redis] = agree("\nDo you need a Redis DB? (yes|no)")
-      @config[:sidekiq] = agree("\nDo you need a SideKiq Container? (yes|no)") if @config[:redis]
+      @config[:ruby] = choose("\n<%= color 'Choose a ruby version?', BOLD%>", "latest", "2.4", "2.3", "2.2")
+      @config[:db] = choose("\n<%= color 'Choose a DB Engine', BOLD%>", :pgsql, :mysql)
+      @config[:db_name] = ask "\n<%= color 'Choose a database name', BOLD%>"
+      @config[:db_user] = ask "\n<%= color 'Choose a database username', BOLD%>"
+      @config[:db_password] = ask "\n<%= color 'Choose a database password', BOLD%>"
+      @config[:redis] = agree("\n<%= color 'Do you need a Redis DB? (yes|no)', BOLD%>")
+      @config[:sidekiq] = agree("\n<%= color 'Do you need a SideKiq Container? (yes|no)', BOLD%>") if @config[:redis]
 
-      user_agree = agree "\nSummary:
+      say "\nSummary:
     - Ruby version: #{@config[:ruby]}
     - DB Engine: #{@config[:db]}
     - DB Name: #{@config[:db_name]}
     - DB Username: #{@config[:db_user]}
     - DB Password: #{@config[:db_password]}
     - Redis? #{@config[:redis]}
-    - Job Container? #{@config[:sidekiq] ||= false}\n
-  Is this correct? (yes|no)"
+    - Job Container? #{@config[:sidekiq] ||= false}"
+
+      user_agree = agree("\n<%= color 'Is this correct? (yes|no)', BOLD%>")
 
       unless user_agree
         configure
