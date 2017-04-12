@@ -94,12 +94,23 @@ end
 command :attach do |c|
   c.syntax = 'dockrails attach [container]'
   c.summary = 'Attach TTY to a specific container (usefull for ByeBug or Pry)'
-  c.description = 'toto'
+  c.description = ''
+  c.example 'description', 'dockrails attach web'
   c.action do |args, options|
     if args.size < 1
-      say "\n<%= color 'Please specify a container, ex: dockrails attach app', RED%>"
+      say "\n<%= color 'Please specify a container, ex: dockrails attach web', RED%>"
     else
       system("docker attach $(docker-compose ps -q #{args[0]})")
     end
+  end
+end
+
+command :update do |c|
+  c.syntax = 'dockrails update'
+  c.summary = 'Update to latest Dockrails version'
+  c.description = ''
+  c.example 'description', 'dockrails update'
+  c.action do |args, options|
+    system("gem update dockrails")
   end
 end

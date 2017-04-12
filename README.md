@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gmontard/dockrails.svg?branch=master)](https://travis-ci.org/gmontard/dockrails) [![Coverage Status](https://coveralls.io/repos/github/gmontard/dockrails/badge.svg?branch=master)](https://coveralls.io/github/gmontard/dockrails?branch=master)
+[![Gem Version](https://badge.fury.io/rb/dockrails.svg)](https://badge.fury.io/rb/dockrails) [![Build Status](https://travis-ci.org/gmontard/dockrails.svg?branch=master)](https://travis-ci.org/gmontard/dockrails) [![Coverage Status](https://coveralls.io/repos/github/gmontard/dockrails/badge.svg?branch=master)](https://coveralls.io/github/gmontard/dockrails?branch=master)
 
 ![](http://i.imgur.com/GpOR4F5.png)
 
@@ -23,7 +23,7 @@ Currently the CLI offers a Docker environment with the option of:
 
 You can expand this scope very easily by modifying the output docker files generated.
 
-[![asciicast](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx.png)](https://asciinema.org/a/014uofjrg4fiimj3wykj166zx?autoplay=1)
+[![asciicast](https://asciinema.org/a/26tls9e5bh860ai91d7grkkf6.png)](https://asciinema.org/a/26tls9e5bh860ai91d7grkkf6)
 
 ### Install
 
