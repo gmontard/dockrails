@@ -181,10 +181,8 @@ module Dockrails
         f.write "syncs:\n"
         f.write " #{@app_path}-web-sync:\n"
         f.write "   src: './#{@app_path}'\n"
-        f.write "   dest: '/app'\n"
         f.write " #{@app_path}-bundle-sync:\n"
         f.write "   src: './bundle'\n"
-        f.write "   dest: '/bundle'\n"
       end
     end
   end
