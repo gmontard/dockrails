@@ -68,5 +68,3 @@ my-docker-rails-env/
   docker-sync.yml
   YOUR_RAILS_APP/
 ```
-
-### Release
