@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.0.0"
   s.executables           << 'dockrails'
   s.add_dependency 'commander', '~> 4.2'
-  s.add_dependency 'docker-sync', '~> 0.2.3'
+  s.add_dependency 'docker-sync', '~> 0.4.0'
 
   s.add_development_dependency('rspec', '~> 3.2')
   s.add_development_dependency('rake')

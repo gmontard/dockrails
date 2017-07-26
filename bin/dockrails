@@ -52,8 +52,16 @@ Please take a look at the different files generated:
 - docker-compose.yml
 - docker-sync.yml', GREEN%>"
 
-    say "\nStart your dockerized Rails Environement: dockrails start"
-    say "Familiarize yourself with the different commands: dockrails --help"
+    say "\nUpdate your \"database.yml\" file:
+development:
+  <<: *default
+  database: <%%= ENV['DB_USER'] %>
+  username: <%%= ENV['DB_USER'] %>
+  password: <%%= ENV['DB_PASSWORD'] %>
+  host: db"
+
+  say "\nStart your dockerized Rails Environement: dockrails start"
+  say "Familiarize yourself with the different commands: dockrails --help"
   end
 end
 

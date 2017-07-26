@@ -137,8 +137,8 @@ module Dockrails
         f.write "   build: .\n"
         f.write "   command: sh scripts/start-dev.sh\n"
         f.write "   volumes:\n"
-        f.write "     - #{@app_path}-web-sync:/app:rw\n"
-        f.write "     - #{@app_path}-bundle-sync:/bundle:rw\n"
+        f.write "     - #{@app_path}-web-sync:/app:nocopy\n"
+        f.write "     - #{@app_path}-bundle-sync:/bundle:nocopy\n"
         f.write "     - ./keys:/root/.ssh/\n"
         f.write "   ports:\n"
         f.write "     - \"3000:3000\"\n"
@@ -157,8 +157,8 @@ module Dockrails
           f.write "   build: .\n"
           f.write "   command: bundle exec sidekiq -C config/sidekiq.yml\n"
           f.write "   volumes:\n"
-          f.write "     - #{@app_path}-web-sync:/app:rw\n"
-          f.write "     - #{@app_path}-bundle-sync:/bundle:rw\n"
+          f.write "     - #{@app_path}-web-sync:/app:nocopy\n"
+          f.write "     - #{@app_path}-bundle-sync:/bundle:nocopy\n"
           f.write "     - ./keys:/root/.ssh/\n"
           f.write "   environment:\n"
           f.write "     REDIS_URL: redis://redis:6379\n"
@@ -181,10 +181,8 @@ module Dockrails
         f.write "syncs:\n"
         f.write " #{@app_path}-web-sync:\n"
         f.write "   src: './#{@app_path}'\n"
-        f.write "   dest: '/app'\n"
         f.write " #{@app_path}-bundle-sync:\n"
         f.write "   src: './bundle'\n"
-        f.write "   dest: '/bundle'\n"
       end
     end
   end
