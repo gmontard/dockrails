@@ -5,7 +5,7 @@ require "dockrails/version"
 Gem::Specification.new do |s|
   s.name                  = 'dockrails'
   s.version               = Dockrails::VERSION
-  s.date                  = '2017-04-10'
+  s.date                  = '2017-11-02'
   s.summary               = "Simple CLI to Generate and Run a Rails environment with Docker!"
   s.description           = "Docker + Rails + Mac + Dev = <3"
   s.homepage              = "https://github.com/gmontard/dockrails/"
