@@ -85,6 +85,16 @@ command :clean do |c|
   end
 end
 
+command :build do |c|
+  c.syntax = 'dockrails build'
+  c.summary = 'Build or rebuild the docker image'
+  c.description = ''
+  c.example 'description', 'dockrails build'
+  c.action do |args, options|
+    system("docker-compose build")
+  end
+end
+
 command :run do |c|
   c.syntax = 'dockrails run [container] [command]'
   c.summary = 'Run a command on a specific container'

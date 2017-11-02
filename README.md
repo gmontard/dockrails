@@ -47,6 +47,9 @@ Start the containers:
 Stop/Remove the containers:
 - ```dockrails clear```
 
+Build/Rebuild the docker image:
+- ```dockrails build```
+
 Run a command inside a container:
 - ```dockrails run CONTAINER COMMAND``` (ex: dockrails run web bundle install)
 
