@@ -45,7 +45,7 @@ Start the containers:
 - ```dockrails start```
 
 Stop/Remove the containers:
-- ```dockrails clear```
+- ```dockrails clean```
 
 Build/Rebuild the docker image:
 - ```dockrails build```
