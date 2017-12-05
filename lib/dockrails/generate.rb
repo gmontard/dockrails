@@ -49,6 +49,8 @@ module Dockrails
 
     def create_folders
       FileUtils.rm_rf('data')
+      FileUtils.rm_rf('bundle')
+      FileUtils.mkdir_p('bundle')
       FileUtils.mkdir_p('data/sql')
       FileUtils.mkdir_p('data/redis') if @config[:redis]
     end
