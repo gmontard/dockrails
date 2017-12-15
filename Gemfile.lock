@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    dockrails (1.0.6)
+    dockrails (1.0.7)
       commander (~> 4.2)
       docker-sync (~> 0.4.0)
 
@@ -21,7 +21,7 @@ GEM
     daemons (1.2.4)
     diff-lcs (1.3)
     docile (1.1.5)
-    docker-compose (1.1.6)
+    docker-compose (1.1.7)
       backticks (~> 1.0)
     docker-sync (0.4.6)
       daemons (~> 1.2, >= 1.2.3)

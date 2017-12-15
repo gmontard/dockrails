@@ -84,6 +84,7 @@ command :clean do |c|
     system("docker-sync-stack clean")
   end
 end
+alias_command :stop, :'clean'
 
 command :build do |c|
   c.syntax = 'dockrails build'
@@ -102,9 +103,23 @@ command :run do |c|
   c.example 'description', 'dockrails run [web|job|db|redis] bundle install'
   c.action do |args, options|
     if args.size < 2
-      say "\n<%= color 'Please specify a container and command to run, ex: dockrails run app bundle install', RED%>"
+      say "\n<%= color 'Please specify a container and command to run, ex: dockrails run web bundle install', RED%>"
     else
       system("docker-compose run #{args.join(" ")}")
+    end
+  end
+end
+
+command :restart do |c|
+  c.syntax = 'dockrails restart [container]'
+  c.summary = 'Restart a specific container'
+  c.description = ''
+  c.example 'description', 'dockrails restart web'
+  c.action do |args, options|
+    if args.size < 1
+      say "\n<%= color 'Please specify a container, ex: dockrails restart web', RED%>"
+    else
+      system("docker-compose restart #{args.join(" ")}")
     end
   end
 end

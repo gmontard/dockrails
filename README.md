@@ -50,6 +50,9 @@ Stop/Remove the containers:
 Build/Rebuild the docker image:
 - ```dockrails build```
 
+Restart a container:
+- ```dockrails restart CONTAINER```
+
 Run a command inside a container:
 - ```dockrails run CONTAINER COMMAND``` (ex: dockrails run web bundle install)
 
