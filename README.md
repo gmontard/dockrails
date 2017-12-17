@@ -47,6 +47,12 @@ Start the containers:
 Stop/Remove the containers:
 - ```dockrails clean```
 
+Show live tail of logs:
+- ```dockrails logs```
+
+Show live tail of logs for a container:
+- ```dockrails logs web```
+
 Build/Rebuild the docker image:
 - ```dockrails build```
 
@@ -58,7 +64,6 @@ Run a command inside a container:
 
 Attach TTY to a container (ex: for debugging with ByeBug or Pry):
 - ```dockrails attach CONTAINER```
-:warning: DO NOT use ```CTRL+C``` here or it will exit the container but instead use ```CTRL+Q+P```
 
 
 ### Folder structure

@@ -9,6 +9,8 @@ program :version, Dockrails::VERSION
 program :description, 'CLI to Generate and Run a Rails environment with Docker'
 program :help_formatter, Commander::HelpFormatter::TerminalCompact
 
+default_command :help
+
 command :init do |c|
   c.syntax = 'dockrails init'
   c.summary = 'Initialize your Rails Docker environment'
@@ -71,28 +73,42 @@ command :start do |c|
   c.description = ''
   c.example 'description', 'dockrails start'
   c.action do |args, options|
-    system("docker-sync-stack start")
+    system("docker-sync start && docker-compose up")
   end
 end
 
 command :clean do |c|
   c.syntax = 'dockrails clean'
-  c.summary = 'Clean the docker containers'
+  c.summary = 'Stop the containers'
   c.description = ''
   c.example 'description', 'dockrails clean'
   c.action do |args, options|
-    system("docker-sync-stack clean")
+    system("docker-compose stop && docker-sync clean")
   end
 end
 alias_command :stop, :'clean'
 
 command :build do |c|
   c.syntax = 'dockrails build'
-  c.summary = 'Build or rebuild the docker image'
+  c.summary = 'Build or rebuild the services'
   c.description = ''
   c.example 'description', 'dockrails build'
   c.action do |args, options|
     system("docker-compose build")
+  end
+end
+
+command :logs do |c|
+  c.syntax = 'dockrails logs [container]'
+  c.summary = 'Access containers logs'
+  c.description = ''
+  c.example 'description', 'dockrails logs web'
+  c.action do |args, options|
+    if args.size < 1
+      system("docker-compose logs --tail=20 -f")
+    else
+      system("docker-compose logs --tail=20 -f #{args.join(" ")}")
+    end
   end
 end
 
@@ -133,7 +149,7 @@ command :attach do |c|
     if args.size < 1
       say "\n<%= color 'Please specify a container, ex: dockrails attach web', RED%>"
     else
-      system("docker attach $(docker-compose ps -q #{args[0]})")
+      system("docker attach --detach-keys ctrl-c $(docker-compose ps -q #{args[0]})")
     end
   end
 end
