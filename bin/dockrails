@@ -73,7 +73,7 @@ command :start do |c|
   c.description = ''
   c.example 'description', 'dockrails start'
   c.action do |args, options|
-    system("docker-sync start && docker-compose up")
+    system("docker-sync start ; docker-compose up")
   end
 end
 
@@ -83,7 +83,7 @@ command :clean do |c|
   c.description = ''
   c.example 'description', 'dockrails clean'
   c.action do |args, options|
-    system("docker-compose stop && docker-sync clean")
+    system("docker-compose stop ; docker-sync clean")
   end
 end
 alias_command :stop, :'clean'
