@@ -8,6 +8,7 @@ program :name, 'dockrails'
 program :version, Dockrails::VERSION
 program :description, 'CLI to Generate and Run a Rails environment with Docker'
 program :help_formatter, Commander::HelpFormatter::TerminalCompact
+program :help_paging, false
 
 default_command :help
 
